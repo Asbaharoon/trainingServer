@@ -96,6 +96,8 @@ public class SokoServer extends TrainingServer{
 			}
 		};
 
+		handler.getWebSocketFactory().setMinVersion(-1);
+
 		webSocketServer.setHandler(handler);
 		try {
 			webSocketServer.start();
