@@ -65,6 +65,7 @@ public class TrainingSessionManager {
 		this.sp = new StateJSONParser(this.domain);
 
 		this.cti.addActionObserverToOperatingDomain(new ClientActionObserver(this));
+		this.cti.setAlwaysResetPriorsWithCommand(false);
 	}
 
 

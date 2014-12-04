@@ -69,7 +69,9 @@ public class SokoServer extends TrainingServer{
 			@Override
 			public List<FeedbackStrategy> getFeedbackStrategies() {
 				List<FeedbackStrategy> feedbackStrategies = new ArrayList<FeedbackStrategy>();
-				feedbackStrategies.add(new FeedbackStrategy(0.7, 0.7, 0.1));
+				feedbackStrategies.add(new FeedbackStrategy(0.5, 0.5, 0.1));
+				feedbackStrategies.add(new FeedbackStrategy(0.1, 0.6, 0.1));
+				feedbackStrategies.add(new FeedbackStrategy(0.6, 0.1, 0.1));
 				return feedbackStrategies;
 			}
 

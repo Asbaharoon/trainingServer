@@ -65,6 +65,7 @@ public abstract class TrainingServer implements WebSocket, WebSocket.OnFrame, We
 	@Override
 	public void onOpen(Connection connection) {
 		System.err.printf("%s#onOpen %s\n",this.getClass().getSimpleName(),connection);
+		connection.setMaxIdleTime(600000);
 		this.trainingSessionManager = new TrainingSessionManager(connection, this.problemRequest);
 	}
 
