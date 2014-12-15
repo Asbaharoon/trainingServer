@@ -172,7 +172,7 @@ public class TrainingSessionManager {
 
 		String logId = (String)message.get(MSGFIELD_LOGID);
 
-		//tell CTI to log it.
+		this.cti.writeAllEpisodesToFiles("logs/" + logId);
 
 
 	}
