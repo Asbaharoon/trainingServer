@@ -31,12 +31,14 @@ public class TrainingSessionManager {
 	public static final String						MSGTYPE_TERMNOLEARN = "terminateWithoutLearning_msg";
 	public static final String						MSGTYPE_FEEDBACK = "feedback_msg";
 	public static final String						MSGTYPE_OBSERVE = "observe";
+	public static final String						MSGTYPE_ENDEXP = "end_exp";
 
 	public static final String						MSGFIELD_COMMAND = "command";
 	public static final String						MSGFIELD_STATE = "state";
 	public static final String						MSGFIELD_FEEDBACK = "feedback";
 	public static final String						MSGFIELD_ACTION = "action";
 	public static final String						MSGFIELD_ENDSTATE = "end_state";
+	public static final String						MSGFIELD_LOGID = "log_id";
 
 
 	protected WebSocket.Connection connection;
@@ -109,7 +111,8 @@ public class TrainingSessionManager {
 		try {
 			this.connection.sendMessage(jsonMsgString);
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Tried to send observation message, but connection is dead. Terminating behavior.");
+			this.cti.giveTerminateSignal();
 		}
 
 
@@ -129,6 +132,9 @@ public class TrainingSessionManager {
 			}
 			else if(msgType.equals(MSGTYPE_FEEDBACK)){
 				this.receiveGiveFeedbackMessage(message);
+			}
+			else if(msgType.equals(MSGTYPE_ENDEXP)){
+				this.receiveEndExpMessage(message);
 			}
 		}
 	}
@@ -159,6 +165,16 @@ public class TrainingSessionManager {
 		else{
 			this.cti.givePunishment();
 		}
+	}
+
+
+	protected void receiveEndExpMessage(Map<String, Object> message){
+
+		String logId = (String)message.get(MSGFIELD_LOGID);
+
+		//tell CTI to log it.
+
+
 	}
 
 
