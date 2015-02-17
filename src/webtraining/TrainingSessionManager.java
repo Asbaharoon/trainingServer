@@ -39,6 +39,7 @@ public class TrainingSessionManager {
 	public static final String						MSGFIELD_ACTION = "action";
 	public static final String						MSGFIELD_ENDSTATE = "end_state";
 	public static final String						MSGFIELD_LOGID = "log_id";
+	public static final String						MSGFIELD_DELAY = "delay";
 
 
 	protected WebSocket.Connection connection;
@@ -145,6 +146,19 @@ public class TrainingSessionManager {
 		String command = (String)message.get(MSGFIELD_COMMAND);
 		List<Map<String, Object>> jsonState = (List<Map<String, Object>>)message.get(MSGFIELD_STATE);
 		State s = sp.JSONPreparedToState(jsonState);
+
+		Object delayOb = message.get(MSGFIELD_DELAY);
+		if(delayOb != null){
+			int delay;
+			if(delayOb instanceof Integer){
+				delay = (Integer)delayOb;
+			}
+			else{
+				delay = Integer.parseInt((String)delayOb);
+			}
+			this.cti.setActionDelay(delay);
+		}
+
 		this.cti.giveCommandInInitialState(s, command);
 	}
 
