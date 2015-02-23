@@ -13,6 +13,8 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.jetty.websocket.WebSocket;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -33,12 +35,14 @@ public class TrainingSessionManager {
 	public static final String						MSGTYPE_OBSERVE = "observe";
 	public static final String						MSGTYPE_ENDEXP = "end_exp";
 
+
 	public static final String						MSGFIELD_COMMAND = "command";
 	public static final String						MSGFIELD_STATE = "state";
 	public static final String						MSGFIELD_FEEDBACK = "feedback";
 	public static final String						MSGFIELD_ACTION = "action";
 	public static final String						MSGFIELD_ENDSTATE = "end_state";
 	public static final String						MSGFIELD_LOGID = "log_id";
+	public static final String						MSGFIELD_EXPINFO = "exp_info";
 	public static final String						MSGFIELD_DELAY = "delay";
 
 
@@ -187,6 +191,19 @@ public class TrainingSessionManager {
 		String logId = (String)message.get(MSGFIELD_LOGID);
 
 		this.cti.writeAllEpisodesToFiles("logs/" + logId);
+
+		try {
+			String expInfo = (String) message.get(MSGFIELD_EXPINFO);
+
+			if(expInfo != null){
+				BufferedWriter writer = new BufferedWriter(new FileWriter("logs/" + logId + "/expInfo.txt"));
+				writer.write(expInfo);
+				writer.close();
+			}
+
+		}catch (Exception e){
+			System.out.println("Error in recording exp information for ." + logId + "\n" + e.getMessage());
+		}
 
 
 	}
