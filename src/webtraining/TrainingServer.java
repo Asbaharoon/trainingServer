@@ -16,9 +16,13 @@ import java.util.Map;
 public abstract class TrainingServer implements WebSocket, WebSocket.OnFrame, WebSocket.OnBinaryMessage, WebSocket.OnTextMessage, WebSocket.OnControl{
 
 	protected TrainingSessionManager trainingSessionManager;
+	protected TrainingSessionManager2 trainingSessionManager2;
 	protected TrainingProblemRequest problemRequest;
 
+	protected boolean useTrainingSessionManager2;
+
 	public TrainingServer(){
+		this.useTrainingSessionManager2 = false;
 		this.problemRequest = this.getTrainingProblemRequest();
 	}
 
@@ -59,14 +63,24 @@ public abstract class TrainingServer implements WebSocket, WebSocket.OnFrame, We
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.trainingSessionManager.receiveClientMessage(messageData);
+		if(!this.useTrainingSessionManager2) {
+			this.trainingSessionManager.receiveClientMessage(messageData);
+		}
+		else{
+			this.trainingSessionManager2.receiveClientMessage(messageData);
+		}
 	}
 
 	@Override
 	public void onOpen(Connection connection) {
 		System.err.printf("%s#onOpen %s\n",this.getClass().getSimpleName(),connection);
 		connection.setMaxIdleTime(600000);
-		this.trainingSessionManager = new TrainingSessionManager(connection, this.problemRequest);
+		if(!this.useTrainingSessionManager2) {
+			this.trainingSessionManager = new TrainingSessionManager(connection, this.problemRequest);
+		}
+		else{
+			this.trainingSessionManager2 = new TrainingSessionManager2(connection, this.problemRequest);
+		}
 	}
 
 	@Override
