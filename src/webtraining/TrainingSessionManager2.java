@@ -76,6 +76,12 @@ public class TrainingSessionManager2 implements ActionObserver{
 
 		this.cti.addActionObserverToOperatingDomain(this);
 		this.cti.setAlwaysResetPriorsWithCommand(false);
+		this.cti.setRemoveRPPMWhenTrueSatisfied(true);
+
+		this.cti.addTrueGoal("Move to the blue room", "agentInRoom agent0 room1");
+		this.cti.addTrueGoal("Move the red bag to the blue room", "blockInRoom block0 room0");
+		this.cti.addTrueGoal("Move to the yellow room", "agentInRoom agent0 room2");
+		this.cti.addTrueGoal("Move the blue chair to the purple room", "blockInRoom block0 room3");
 	}
 
 
