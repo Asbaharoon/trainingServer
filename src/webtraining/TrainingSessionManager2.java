@@ -45,6 +45,7 @@ public class TrainingSessionManager2 implements ActionObserver{
 	public static final String						MSGFIELD_LOGID = "log_id";
 	public static final String						MSGFIELD_EXPINFO = "exp_info";
 	public static final String						MSGFIELD_DELAY = "delay";
+	public static final String						MSGFIELD_SPEEDMODE = "speed_mode";
 
 
 	protected WebSocket.Connection connection;
@@ -168,6 +169,17 @@ public class TrainingSessionManager2 implements ActionObserver{
 				delay = Integer.parseInt((String)delayOb);
 			}
 			this.cti.setActionDelay(delay);
+		}
+		Object speedOb = message.get(MSGFIELD_SPEEDMODE);
+		if(speedOb != null){
+			int speed;
+			if(speedOb instanceof Integer){
+				speed = (Integer)speedOb;
+			}
+			else{
+				speed = Integer.parseInt((String)speedOb);
+			}
+			this.cti.setSpeedMode(speed);
 		}
 
 		this.cti.giveCommandInInitialState(s, command);
