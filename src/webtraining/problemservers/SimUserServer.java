@@ -22,11 +22,11 @@ import java.util.List;
 /**
  * @author James MacGlashan.
  */
-public class SokoServer2 extends TrainingServer{
+public class SimUserServer extends TrainingServer{
 
-	public SokoServer2() {
+	public SimUserServer() {
 		super();
-		this.trainingServer = 1;
+		this.trainingServer = 2;
 	}
 
 	@Override
@@ -75,21 +75,23 @@ public class SokoServer2 extends TrainingServer{
 			public List<FeedbackStrategy> getFeedbackStrategies() {
 				List<FeedbackStrategy> feedbackStrategies = new ArrayList<FeedbackStrategy>();
 
-				FeedbackStrategy balanced = new FeedbackStrategy(0.75, 0.75, 0.1);
+				FeedbackStrategy balanced = new FeedbackStrategy(0.5, 0.5, 0.1);
 				FeedbackStrategy RPlusPMinus = new FeedbackStrategy(0.75, 0.85, 0.1);
 				FeedbackStrategy RMinusPPlus = new FeedbackStrategy(0.85, 0.75, 0.1);
 
-				balanced.setProbOfStrategy(0.32);
-				RPlusPMinus.setProbOfStrategy(0.36);
-				RMinusPPlus.setProbOfStrategy(0.32);
+				balanced.setProbOfStrategy(1.);
+
+//				balanced.setProbOfStrategy(0.32);
+//				RPlusPMinus.setProbOfStrategy(0.36);
+//				RMinusPPlus.setProbOfStrategy(0.32);
 
 				balanced.setName("balanced");
 				RPlusPMinus.setName("R+/P-");
 				RMinusPPlus.setName("R-/P+");
 
 				feedbackStrategies.add(balanced);
-				feedbackStrategies.add(RPlusPMinus);
-				feedbackStrategies.add(RMinusPPlus);
+				//feedbackStrategies.add(RPlusPMinus);
+				//feedbackStrategies.add(RMinusPPlus);
 
 
 				return feedbackStrategies;
@@ -119,7 +121,7 @@ public class SokoServer2 extends TrainingServer{
 		WebSocketHandler handler = new WebSocketHandler() {
 			@Override
 			public WebSocket doWebSocketConnect(HttpServletRequest httpServletRequest, String s) {
-				return new SokoServer2();
+				return new SimUserServer();
 			}
 		};
 

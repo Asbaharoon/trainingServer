@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.jetty.websocket.WebSocket;
+import webtraining.simuser.SimUserTrainingSession;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,12 +18,13 @@ public abstract class TrainingServer implements WebSocket, WebSocket.OnFrame, We
 
 	protected TrainingSessionManager trainingSessionManager;
 	protected TrainingSessionManager2 trainingSessionManager2;
+	protected SimUserTrainingSession suTrainingSessionManger;
 	protected TrainingProblemRequest problemRequest;
 
-	protected boolean useTrainingSessionManager2;
+	protected int trainingServer;
 
 	public TrainingServer(){
-		this.useTrainingSessionManager2 = false;
+		this.trainingServer = 0;
 		this.problemRequest = this.getTrainingProblemRequest();
 	}
 
@@ -63,11 +65,14 @@ public abstract class TrainingServer implements WebSocket, WebSocket.OnFrame, We
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		if(!this.useTrainingSessionManager2) {
+		if(this.trainingServer == 0) {
 			this.trainingSessionManager.receiveClientMessage(messageData);
 		}
-		else{
+		else if(this.trainingServer == 1){
 			this.trainingSessionManager2.receiveClientMessage(messageData);
+		}
+		else if(this.trainingServer == 2){
+			this.suTrainingSessionManger.receiveClientMessage(messageData);
 		}
 	}
 
@@ -75,11 +80,14 @@ public abstract class TrainingServer implements WebSocket, WebSocket.OnFrame, We
 	public void onOpen(Connection connection) {
 		System.err.printf("%s#onOpen %s\n",this.getClass().getSimpleName(),connection);
 		connection.setMaxIdleTime(600000);
-		if(!this.useTrainingSessionManager2) {
+		if(trainingServer == 0) {
 			this.trainingSessionManager = new TrainingSessionManager(connection, this.problemRequest);
 		}
-		else{
+		else if(this.trainingServer == 1){
 			this.trainingSessionManager2 = new TrainingSessionManager2(connection, this.problemRequest);
+		}
+		else if(this.trainingServer == 2){
+			this.suTrainingSessionManger = new SimUserTrainingSession(connection, this.problemRequest);
 		}
 	}
 
