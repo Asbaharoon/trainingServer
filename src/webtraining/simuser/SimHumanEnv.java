@@ -26,12 +26,14 @@ public class SimHumanEnv extends DynamicFeedbackEnvironment {
 	protected boolean hasSat = false;
 	protected GroundedProp goalGp;
 	protected Policy goalPolicy;
+	protected Domain planningDomain;
 
 	protected double mu_p = 0.5;
 	protected double mu_m = 0.5;
 
-	public SimHumanEnv(Domain operatingDomain) {
+	public SimHumanEnv(Domain operatingDomain, Domain planningDomain) {
 		super(operatingDomain);
+		this.planningDomain = planningDomain;
 	}
 
 	@Override

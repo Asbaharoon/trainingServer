@@ -18,13 +18,15 @@ public class CommandsTrainingSimUserInterface extends CommandsTrainingInterface2
 		this.domain = dgen.generateDomain();
 		this.noopAction = new NullAction("noop", domain, ""); //add noop to the operating domain
 
-		this.env = new SimHumanEnv(this.domain);
+
 
 		DomainEnvironmentWrapper dEnvWrapper = new DomainEnvironmentWrapper(this.domain, this.env);
 		this.domainEnvWrapper = dEnvWrapper.generateDomain();
 
 		//generate a domain without the noop for planning
 		this.planningDomain = dgen.generateDomain();
+
+		this.env = new SimHumanEnv(this.domain, this.planningDomain);
 
 		this.envRF = this.env.getEnvironmentRewardRFWrapper();
 		this.envTF = this.env.getEnvironmentTerminalStateTFWrapper();
