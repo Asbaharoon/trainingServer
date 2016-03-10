@@ -75,7 +75,7 @@ public class SimHumanEnv extends DynamicFeedbackEnvironment {
 		this.goalGp = gp;
 		SokoAMDPPlannerPolicyGen pgen = new SokoAMDPPlannerPolicyGen();
 		TerminalFunction goalTF = new TrajectoryModule.ConjunctiveGroundedPropTF(Arrays.asList(gp));
-		pgen.getPolicy(this.operatingDomain, s, new UniformCostRF(), goalTF, new DiscreteStateHashFactory());
+		this.goalPolicy = pgen.getPolicy(this.operatingDomain, s, new UniformCostRF(), goalTF, new DiscreteStateHashFactory());
 	}
 
 	protected double genReward(State s, GroundedAction ga){

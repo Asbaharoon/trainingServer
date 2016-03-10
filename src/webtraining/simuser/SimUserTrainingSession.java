@@ -52,7 +52,7 @@ public class SimUserTrainingSession implements ActionObserver {
 
 	public SimUserTrainingSession(WebSocket.Connection connection, TrainingProblemRequest request){
 
-		System.out.println("Instantiated session manager version 2.");
+		System.out.println("Instantiated Sim user manager.");
 
 		this.connection = connection;
 
