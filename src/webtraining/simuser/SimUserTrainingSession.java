@@ -75,7 +75,7 @@ public class SimUserTrainingSession implements ActionObserver {
 	@Override
 	public void actionEvent(State s, GroundedAction a, State nextState) {
 
-		double r = this.cti.getEnv().getLastReward();
+		double r = ((SimHumanEnv)this.cti.getEnv()).getRealLastReward();
 		boolean terminated = this.cti.getEnv().curStateIsTerminal();
 
 

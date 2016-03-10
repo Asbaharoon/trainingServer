@@ -30,6 +30,7 @@ public class SimHumanEnv extends DynamicFeedbackEnvironment {
 
 	protected double mu_p = 0.5;
 	protected double mu_m = 0.5;
+	protected double realLastReward = 0.;
 
 	public SimHumanEnv(Domain operatingDomain, Domain planningDomain) {
 		super(operatingDomain);
@@ -58,6 +59,7 @@ public class SimHumanEnv extends DynamicFeedbackEnvironment {
 		this.waitForUpdateDelay();
 		this.lastRecordedRewardSequences.add(this.lastStepRewardSequence);
 		this.lastStepRewardSequence = new LinkedList<Double>();
+		this.realLastReward = lastReward;
 
 		return nextState;
 	}
@@ -65,6 +67,10 @@ public class SimHumanEnv extends DynamicFeedbackEnvironment {
 	@Override
 	public double getLastReward() {
 		return this.lastReward;
+	}
+
+	public double getRealLastReward(){
+		return this.realLastReward;
 	}
 
 	@Override
