@@ -3,6 +3,7 @@ package webtraining.problemservers;
 import behavior.training.taskinduction.strataware.FeedbackStrategy;
 import burlap.behavior.statehashing.DiscreteMaskHashingFactory;
 import burlap.behavior.statehashing.StateHashFactory;
+import burlap.debugtools.RandomFactory;
 import burlap.oomdp.auxiliary.DomainGenerator;
 import burlap.oomdp.core.Domain;
 import burlap.oomdp.core.GroundedProp;
@@ -109,6 +110,8 @@ public class SimUserServer extends TrainingServer{
 
 
 	public static void main(String [] args){
+
+		RandomFactory.getMapped(0).setSeed(124);
 
 		int port = 8080;
 		if(args.length == 1){

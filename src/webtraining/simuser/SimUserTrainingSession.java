@@ -6,6 +6,7 @@ import burlap.oomdp.core.Domain;
 import burlap.oomdp.core.State;
 import burlap.oomdp.singleagent.ActionObserver;
 import burlap.oomdp.singleagent.GroundedAction;
+import burlap.oomdp.singleagent.SADomain;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -66,7 +67,8 @@ public class SimUserTrainingSession implements ActionObserver {
 
 		this.sp = new StateJSONParser(this.domain);
 
-		this.cti.addActionObserverToOperatingDomain(this);
+		//this.cti.addActionObserverToOperatingDomain(this);
+		((SADomain)this.cti.getEnvDomain()).addActionObserverForAllAction(this);
 		this.cti.setAlwaysResetPriorsWithCommand(false);
 		this.cti.setRemoveRPPMWhenTrueSatisfied(true);
 

@@ -2,6 +2,7 @@ package webtraining.simuser;
 
 import behavior.training.taskinduction.commands.version2.CommandsTrainingInterface2;
 import burlap.oomdp.auxiliary.DomainGenerator;
+import burlap.oomdp.core.Domain;
 import burlap.oomdp.core.GroundedProp;
 import burlap.oomdp.core.State;
 import burlap.oomdp.singleagent.common.NullAction;
@@ -36,6 +37,9 @@ public class CommandsTrainingSimUserInterface extends CommandsTrainingInterface2
 		return this.env;
 	}
 
+	public Domain getEnvDomain(){
+		return this.domainEnvWrapper;
+	}
 
 	@Override
 	public void giveCommandInInitialState(State s, String command) {
