@@ -107,9 +107,10 @@ public class SimHumanEnv extends DynamicFeedbackEnvironment {
 
 	protected boolean inPolicy(State s, GroundedAction ga){
 
-		if(this.goalGp.isTrue(s) && ga.actionName().equals("noop")){
-			return true;
+		if(this.goalGp.isTrue(s)){
+			return ga.actionName().equals("noop");
 		}
+
 
 		List<Policy.ActionProb> aps = this.goalPolicy.getActionDistributionForState(s);
 		for(Policy.ActionProb ap : aps){
