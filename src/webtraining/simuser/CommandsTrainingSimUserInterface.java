@@ -1,6 +1,7 @@
 package webtraining.simuser;
 
 import behavior.training.taskinduction.commands.version2.CommandsTrainingInterface2;
+import behavior.training.taskinduction.sabl.SABLAgent;
 import burlap.oomdp.auxiliary.DomainGenerator;
 import burlap.oomdp.core.Domain;
 import burlap.oomdp.core.GroundedProp;
@@ -39,6 +40,10 @@ public class CommandsTrainingSimUserInterface extends CommandsTrainingInterface2
 
 	public Domain getEnvDomain(){
 		return this.domainEnvWrapper;
+	}
+
+	public SABLAgent getAgent(){
+		return this.agent;
 	}
 
 	@Override

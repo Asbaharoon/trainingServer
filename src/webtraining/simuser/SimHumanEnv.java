@@ -25,12 +25,14 @@ public class SimHumanEnv extends DynamicFeedbackEnvironment {
 
 	protected boolean hasSat = false;
 	protected GroundedProp goalGp;
+	protected TerminalFunction goalTF;
 	protected Policy goalPolicy;
 	protected Domain planningDomain;
 
 	protected double mu_p = 0.5;
 	protected double mu_m = 0.5;
 	protected double realLastReward = 0.;
+
 
 	public SimHumanEnv(Domain operatingDomain, Domain planningDomain) {
 		super(operatingDomain);
@@ -73,6 +75,10 @@ public class SimHumanEnv extends DynamicFeedbackEnvironment {
 		return this.realLastReward;
 	}
 
+	public TerminalFunction getGoalTF() {
+		return goalTF;
+	}
+
 	@Override
 	public boolean curStateIsTerminal() {
 		boolean gp = this.goalGp.isTrue(this.curState);
@@ -82,8 +88,8 @@ public class SimHumanEnv extends DynamicFeedbackEnvironment {
 	protected void setCurrentGoal(State s, GroundedProp gp){
 		this.goalGp = gp;
 		SokoAMDPPlannerPolicyGen pgen = new SokoAMDPPlannerPolicyGen();
-		TerminalFunction goalTF = new TrajectoryModule.ConjunctiveGroundedPropTF(Arrays.asList(gp));
-		this.goalPolicy = pgen.getPolicy(this.planningDomain, s, new UniformCostRF(), goalTF, new DiscreteStateHashFactory());
+		this.goalTF = new TrajectoryModule.ConjunctiveGroundedPropTF(Arrays.asList(gp));
+		this.goalPolicy = pgen.getPolicy(this.planningDomain, s, new UniformCostRF(), this.goalTF, new DiscreteStateHashFactory());
 	}
 
 	protected double genReward(State s, GroundedAction ga){

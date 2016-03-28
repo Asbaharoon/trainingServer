@@ -1,5 +1,7 @@
 package webtraining.simuser;
 
+import behavior.training.taskinduction.TaskProb;
+import behavior.training.taskinduction.sabl.SABLAgent;
 import burlap.behavior.statehashing.StateHashFactory;
 import burlap.oomdp.auxiliary.common.StateJSONParser;
 import burlap.oomdp.core.Domain;
@@ -38,6 +40,7 @@ public class SimUserTrainingSession implements ActionObserver {
 	public static final String						MSGFIELD_FEEDBACK = "feedback";
 	public static final String						MSGFIELD_TERM = "terminated";
 	public static final String						MSGFIELD_ACTION = "action";
+	public static final String						MSGFIELD_SCORE = "score";
 	public static final String						MSGFIELD_LOGID = "log_id";
 	public static final String						MSGFIELD_EXPINFO = "exp_info";
 	public static final String						MSGFIELD_DELAY = "delay";
@@ -48,6 +51,9 @@ public class SimUserTrainingSession implements ActionObserver {
 	protected StateJSONParser sp;
 
 	protected CommandsTrainingSimUserInterface cti;
+
+
+	protected int numExplicit = 0;
 
 
 
@@ -80,6 +86,18 @@ public class SimUserTrainingSession implements ActionObserver {
 		double r = ((SimHumanEnv)this.cti.getEnv()).getRealLastReward();
 		boolean terminated = this.cti.getEnv().curStateIsTerminal();
 
+		if(r != 0.){
+			TaskProb ml = this.getMostLikelyTask();
+			SimHumanEnv env = (SimHumanEnv)this.cti.getEnv();
+			if(ml == null){
+				this.numExplicit++;
+			}
+			else if(!ml.getTask().toString().equals(env.goalTF.toString())){
+				this.numExplicit++;
+			}
+		}
+
+		//System.out.println("Score: " + this.numExplicit);
 
 		//set up message
 		List<Map<String, Object>> jsonState = sp.getJSONPrepared(nextState);
@@ -89,6 +107,7 @@ public class SimUserTrainingSession implements ActionObserver {
 		javaMessage.put(MSGFIELD_ACTION, a.toString());
 		javaMessage.put(MSGFIELD_FEEDBACK, r);
 		javaMessage.put(MSGFIELD_TERM, terminated);
+		javaMessage.put(MSGFIELD_SCORE, this.numExplicit);
 
 		JsonFactory jsonFactory = new JsonFactory();
 		StringWriter writer = new StringWriter();
@@ -156,6 +175,7 @@ public class SimUserTrainingSession implements ActionObserver {
 
 		String goalString = (String)message.get(MSGFIELD_GOAL);
 
+		this.numExplicit = 0;
 		this.cti.giveCommandInInitialState(s, command, goalString);
 	}
 
@@ -178,6 +198,29 @@ public class SimUserTrainingSession implements ActionObserver {
 			System.out.println("Error in recording exp information for ." + logId + "\n" + e.getMessage());
 		}
 
+	}
 
+	protected TaskProb getMostLikelyTask(){
+		SABLAgent agent = this.cti.getAgent();
+
+		List<TaskProb> distro = agent.getTaskProbabilityDistribution();
+		TaskProb ml = null;
+		double mlp = -1.;
+		for(TaskProb tp : distro){
+			if(ml == null){
+				ml = tp;
+				mlp = tp.getProb();
+			}
+			else if(tp.getProb() > mlp){
+				ml = tp;
+				mlp = tp.getProb();
+			}
+			else if(tp.getProb() == mlp){
+				ml = null;
+			}
+
+		}
+
+		return ml;
 	}
 }
