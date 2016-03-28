@@ -41,6 +41,7 @@ public class SimUserTrainingSession implements ActionObserver {
 	public static final String						MSGFIELD_TERM = "terminated";
 	public static final String						MSGFIELD_ACTION = "action";
 	public static final String						MSGFIELD_SCORE = "score";
+	public static final String						MSGFIELD_SCORE2 = "score2";
 	public static final String						MSGFIELD_LOGID = "log_id";
 	public static final String						MSGFIELD_EXPINFO = "exp_info";
 	public static final String						MSGFIELD_DELAY = "delay";
@@ -54,6 +55,7 @@ public class SimUserTrainingSession implements ActionObserver {
 
 
 	protected int numExplicit = 0;
+	protected int numSteps = 0;
 
 
 
@@ -91,9 +93,21 @@ public class SimUserTrainingSession implements ActionObserver {
 			SimHumanEnv env = (SimHumanEnv)this.cti.getEnv();
 			if(ml == null){
 				this.numExplicit++;
+				this.numSteps++;
 			}
 			else if(!ml.getTask().toString().equals(env.goalTF.toString())){
 				this.numExplicit++;
+				this.numSteps++;
+			}
+		}
+		else{
+			TaskProb ml = this.getMostLikelyTask();
+			SimHumanEnv env = (SimHumanEnv)this.cti.getEnv();
+			if(ml == null){
+				this.numSteps++;
+			}
+			else if(!ml.getTask().toString().equals(env.goalTF.toString())){
+				this.numSteps++;
 			}
 		}
 
@@ -108,6 +122,7 @@ public class SimUserTrainingSession implements ActionObserver {
 		javaMessage.put(MSGFIELD_FEEDBACK, r);
 		javaMessage.put(MSGFIELD_TERM, terminated);
 		javaMessage.put(MSGFIELD_SCORE, this.numExplicit);
+		javaMessage.put(MSGFIELD_SCORE2, this.numSteps);
 
 		JsonFactory jsonFactory = new JsonFactory();
 		StringWriter writer = new StringWriter();
@@ -176,6 +191,7 @@ public class SimUserTrainingSession implements ActionObserver {
 		String goalString = (String)message.get(MSGFIELD_GOAL);
 
 		this.numExplicit = 0;
+		this.numSteps = 0;
 		this.cti.giveCommandInInitialState(s, command, goalString);
 	}
 
