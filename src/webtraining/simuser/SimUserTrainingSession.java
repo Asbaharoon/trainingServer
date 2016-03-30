@@ -223,7 +223,7 @@ public class SimUserTrainingSession implements ActionObserver {
 		TaskProb ml = null;
 		double mlp = -1.;
 		for(TaskProb tp : distro){
-			if(ml == null){
+			if(mlp == -1){
 				ml = tp;
 				mlp = tp.getProb();
 			}
