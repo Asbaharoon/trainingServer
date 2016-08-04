@@ -25,7 +25,7 @@ public class SimHumanEnv extends DynamicFeedbackEnvironment {
 
 	protected boolean hasSat = false;
 	protected GroundedProp goalGp;
-	protected TerminalFunction goalTF;
+	public TerminalFunction goalTF;
 	protected Policy goalPolicy;
 	protected Domain planningDomain;
 
