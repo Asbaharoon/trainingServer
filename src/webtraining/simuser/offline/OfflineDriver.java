@@ -48,4 +48,17 @@ public class OfflineDriver {
         }
     }
 
+
+    public static void main(String[] args) {
+        OfflineDriver driver = new OfflineDriver();
+
+
+        //generate curriculum list
+
+        //then run driver.simulateCurriculum(...) to get list of scores on each stage of the curriculum
+        //you can run simulateCurriculum multiple times to get multiple samples of the scores the agent would get
+        //for the same input curriculum
+
+    }
+
 }
